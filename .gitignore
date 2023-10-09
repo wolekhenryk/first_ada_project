@@ -1,0 +1,18 @@
+# GNAT generated files
+*.ali
+*.o
+*.bexch
+*.s
+*.ads~
+*.adb~
+b__*
+
+# GNAT project files
+*.gpr~
+
+# GNAT Studio temporary files
+.gpr_state
+
+# Directories
+obj/
+bin/
