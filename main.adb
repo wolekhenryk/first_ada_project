@@ -17,7 +17,7 @@ procedure main is
    subtype Consumer_Type is Integer range 1 .. Number_Of_Consumers;
 
    Product_Name: constant array (Product_Type) of String(1 .. 8) :=
-     ("Radiator", "Tailgate", "Airbags ", "Sunroof ", "Gearbox ");
+     ("Radiator", "Wheel   ", "Airbags ", "Sunroof ", "Gearbox ");
 
    Assembly_Name: constant array (Assembly_Type) of String(1 .. 3)
      := ("BMW", "AMG", "KTM");
@@ -130,30 +130,30 @@ procedure main is
    end Consumer;
 
    task body Buffer is
-      Storage_Capacity: constant Integer := 30;
+      Storage_Capacity: constant Integer := 23;
       type Storage_type is array (Product_Type) of Integer;
       Storage: Storage_type
         := (0, 0, 0, 0, 0);
       Assembly_Content: array(Assembly_Type, Product_Type) of Integer
-        := ((2, 1, 2, 1, 2),
-            (2, 2, 0, 1, 0),
-            (1, 1, 2, 0, 1));
-      Max_Assembly_Content: array(Product_Type) of Integer;
+        := ((1, 4, 4, 1, 1),
+            (1, 4, 6, 1, 1),
+            (1, 1, 5, 1, 1));
+      Max_Assembly_Content: constant array(Product_Type) of Integer := (3, 11, 7, 13, 5);
       Assembly_Number: array(Assembly_Type) of Integer
         := (1, 1, 1);
       In_Storage: Integer := 0;
 
-      procedure Setup_Variables is
-      begin
-         for W in Product_Type loop
-            Max_Assembly_Content(W) := 0;
-            for Z in Assembly_Type loop
-               if Assembly_Content(Z, W) > Max_Assembly_Content(W) then
-                  Max_Assembly_Content(W) := Assembly_Content(Z, W);
-               end if;
-            end loop;
-         end loop;
-      end Setup_Variables;
+      --procedure Setup_Variables is
+      --begin
+      --   for W in Product_Type loop
+      --      Max_Assembly_Content(W) := 0;
+      --      for Z in Assembly_Type loop
+      --         if Assembly_Content(Z, W) > Max_Assembly_Content(W) then
+      --            Max_Assembly_Content(W) := Assembly_Content(Z, W);
+      --         end if;
+      --      end loop;
+      --   end loop;
+      --end Setup_Variables;
 
       function Can_Accept(Product: Product_Type) return Boolean is
          Free: Integer;		--  free room in the storage
@@ -216,7 +216,7 @@ procedure main is
 
    begin
       Put_Line("Buffer started");
-      Setup_Variables;
+      --Setup_Variables;
       loop
          accept Take(Product: in Product_Type; Number: in Integer; Taken: out Boolean) do
             if Can_Accept(Product) then
