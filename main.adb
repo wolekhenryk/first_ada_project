@@ -130,15 +130,15 @@ procedure main is
    end Consumer;
 
    task body Buffer is
-      Storage_Capacity: constant Integer := 23;
+      Storage_Capacity: constant Integer := 13;
       type Storage_type is array (Product_Type) of Integer;
       Storage: Storage_type
         := (0, 0, 0, 0, 0);
       Assembly_Content: array(Assembly_Type, Product_Type) of Integer
-        := ((1, 4, 4, 1, 1),
-            (1, 4, 6, 1, 1),
-            (1, 1, 5, 1, 1));
-      Max_Assembly_Content: constant array(Product_Type) of Integer := (3, 11, 7, 13, 5);
+        := ((1, 1, 1, 1, 1),
+            (1, 1, 1, 1, 1),
+            (1, 1, 1, 1, 1));
+      Max_Assembly_Content: constant array(Product_Type) of Integer := (4, 4, 4, 4, 4);
       Assembly_Number: array(Assembly_Type) of Integer
         := (1, 1, 1);
       In_Storage: Integer := 0;
