@@ -156,43 +156,11 @@ procedure main is
       --end Setup_Variables;
 
       function Can_Accept(Product: Product_Type) return Boolean is
-         Free: Integer;		--  free room in the storage
-         -- how many products are for production of arbitrary assembly
-         Lacking: array(Product_Type) of Integer;
-         -- how much room is needed in storage to produce arbitrary assembly
-         Lacking_room: Integer;
-         MP: Boolean;			--  can accept
       begin
-         if In_Storage >= Storage_Capacity then
-            return False;
-         end if;
-         -- There is free room in the storage
-         Free := Storage_Capacity - In_Storage;
-         MP := True;
-         for W in Product_Type loop
-            if Storage(W) < Max_Assembly_Content(W) then
-               MP := False;
-            end if;
-         end loop;
-         if MP then
-            return True;		--  storage has products for arbitrary
-            --  assembly
-         end if;
-         if Integer'Max(0, Max_Assembly_Content(Product) - Storage(Product)) > 0 then
-            -- exactly this product lacks
-            return True;
-         end if;
-         Lacking_room := 1;			--  insert current product
-         for W in Product_Type loop
-            Lacking(W) := Integer'Max(0, Max_Assembly_Content(W) - Storage(W));
-            Lacking_room := Lacking_room + Lacking(W);
-         end loop;
-         if Free >= Lacking_room then
-            -- there is enough room in storage for arbitrary assembly
-            return True;
+         if In_Storage < Storage_Capacity then
+            return True; -- Always accept a product if there's space
          else
-            -- no room for this product
-            return False;
+            return False; -- Buffer is full
          end if;
       end Can_Accept;
 
@@ -200,10 +168,10 @@ procedure main is
       begin
          for W in Product_Type loop
             if Storage(W) < Assembly_Content(Assembly, W) then
-               return False;
+               return False; -- Not enough products for the assembly
             end if;
          end loop;
-         return True;
+         return True; -- Enough products for the assembly
       end Can_Deliver;
 
       procedure Storage_Contents is
