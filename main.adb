@@ -130,34 +130,22 @@ procedure main is
    end Consumer;
 
    task body Buffer is
-      Storage_Capacity: constant Integer := 13;
+      Storage_Capacity: constant Integer := 32;
       type Storage_type is array (Product_Type) of Integer;
       Storage: Storage_type
         := (0, 0, 0, 0, 0);
       Assembly_Content: array(Assembly_Type, Product_Type) of Integer
-        := ((1, 1, 1, 1, 1),
-            (1, 1, 1, 1, 1),
-            (1, 1, 1, 1, 1));
-      Max_Assembly_Content: constant array(Product_Type) of Integer := (4, 4, 4, 4, 4);
+        := ((1, 2, 2, 1, 1),
+            (1, 2, 1, 1, 1),
+            (1, 1, 1, 2, 1));
+      Max_Assembly_Content: constant array(Product_Type) of Integer := (3, 12, 3, 3, 3);
       Assembly_Number: array(Assembly_Type) of Integer
         := (1, 1, 1);
       In_Storage: Integer := 0;
 
-      --procedure Setup_Variables is
-      --begin
-      --   for W in Product_Type loop
-      --      Max_Assembly_Content(W) := 0;
-      --      for Z in Assembly_Type loop
-      --         if Assembly_Content(Z, W) > Max_Assembly_Content(W) then
-      --            Max_Assembly_Content(W) := Assembly_Content(Z, W);
-      --         end if;
-      --      end loop;
-      --   end loop;
-      --end Setup_Variables;
-
       function Can_Accept(Product: Product_Type) return Boolean is
       begin
-         if In_Storage < Storage_Capacity then
+         if In_Storage < Storage_Capacity and Storage(Product) < Max_Assembly_Content(Product) then
             return True; -- Always accept a product if there's space
          else
             return False; -- Buffer is full
@@ -216,7 +204,7 @@ procedure main is
                --Number := 0;
             end if;
          end Deliver;
-         Storage_Contents;
+         delay 1.0;
       end loop;
    end Buffer;
 
